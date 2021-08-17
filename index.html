@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      @keyframes beginBrowserAutofill {
+        0% {
+        }
+        to {
+        }
+      }
+      @keyframes endBrowserAutofill {
+        0% {
+        }
+        to {
+        }
+      }
+      .pac-container {
+        background-color: #fff;
+        position: absolute !important;
+        z-index: 1000;
+        border-radius: 2px;
+        border-top: 1px solid #d9d9d9;
+        font-family: Arial, sans-serif;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        overflow: hidden;
+      }
+      .pac-logo:after {
+        content: "";
+        padding: 1px 1px 1px 0;
+        height: 18px;
+        box-sizing: border-box;
+        text-align: right;
+        display: block;
+        background-image: url(https://maps.gstatic.com/mapfiles/api-3/images/powered-by-google-on-white3.png);
+        background-position: right;
+        background-repeat: no-repeat;
+        background-size: 120px 14px;
+      }
+      .hdpi.pac-logo:after {
+        background-image: url(https://maps.gstatic.com/mapfiles/api-3/images/powered-by-google-on-white3_hdpi.png);
+      }
+      .pac-item {
+        cursor: default;
+        padding: 0 4px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        line-height: 30px;
+        text-align: left;
+        border-top: 1px solid #e6e6e6;
+        font-size: 11px;
+        color: #999;
+      }
+      .pac-item:hover {
+        background-color: #fafafa;
+      }
+      .pac-item-selected,
+      .pac-item-selected:hover {
+        background-color: #ebf2fe;
+      }
+      .pac-matched {
+        font-weight: 700;
+      }
+      .pac-item-query {
+        font-size: 13px;
+        padding-right: 3px;
+        color: #000;
+      }
+      .pac-icon {
+        width: 15px;
+        height: 20px;
+        margin-right: 7px;
+        margin-top: 6px;
+        display: inline-block;
+        vertical-align: top;
+        background-image: url(https://maps.gstatic.com/mapfiles/api-3/images/autocomplete-icons.png);
+        background-size: 34px;
+      }
+      .hdpi .pac-icon {
+        background-image: url(https://maps.gstatic.com/mapfiles/api-3/images/autocomplete-icons_hdpi.png);
+      }
+      .pac-icon-search {
+        background-position: -1px -1px;
+      }
+      .pac-item-selected .pac-icon-search {
+        background-position: -18px -1px;
+      }
+      .pac-icon-marker {
+        background-position: -1px -161px;
+      }
+      .pac-item-selected .pac-icon-marker {
+        background-position: -18px -161px;
+      }
+      .pac-placeholder {
+        color: gray;
+      }
+      .pac-target-input:-webkit-autofill {
+        animation-name: beginBrowserAutofill;
+      }
+      .pac-target-input:not(:-webkit-autofill) {
+        animation-name: endBrowserAutofill;
+      }
+    </style>
+    <link href="styles.css" rel="stylesheet" type="text/css" />
+    <title>Courier calculator</title>
+  </head>
+  <body>
+    <div class="blackout"></div>
+    <div class="maplocation">
+      <div class="close">x</div>
+      <h3>Getting Location...</h3>
+      <div id="location"></div>
+      <div id="mapholder" style="position: relative">
+        <div id="map"></div>
+        <div
+          id="mapPoint"
+          style="
+            position: absolute;
+            top: Calc(50% - 3px);
+            left: Calc(50% - 3px);
+            height: 6px;
+            width: 6px;
+            background-color: cornflowerblue;
+            z-index: 10;
+            border-radius: 50% 50%;
+            opacity: 0.8;
+          "
+        ></div>
+      </div>
+      <button onclick="saveResults()">Use location</button>
+    </div>
+    <div class="containerQ" style="margin-top: 0px">
+      <div class="div-block-14" style="margin-bottom: 0%; margin-top: 20%">
+        <div class="div-block-15">
+          <h1 class="heading-7">Courier calculator</h1>
+          <p class="paragraph-4">Get a quick quote</p>
+        </div>
+      </div>
+      <div
+        class="containerQ"
+        style="
+          background-color: #f4f4f4;
+          border-radius: 0px 0px 20px 20px;
+          margin-bottom: 20%;
+        "
+      >
+        <form action="./checkout.html" id="domesticParcel">
+          <h4 class="form-heading">Who we collecting from?</h4>
+          <div class="rel-wrap">
+            <input
+              type="text"
+              required=""
+              placeholder="Name"
+              maxlength="256"
+              name="First-Name"
+              id="First-Name"
+              data-name="First Name"
+              class="autoCompleteFull"
+              autocomplete="off"
+            />
+          </div>
+          <div class="rel-wrap">
+            <input
+              type="email"
+              required=""
+              placeholder="Email"
+              maxlength="256"
+              name="Email"
+              id="Email"
+              data-name="Email"
+              class="autoCompleteFull"
+              autocomplete="off"
+            />
+          </div>
+          <div class="rel-wrap">
+            <input
+              type="tel"
+              required=""
+              placeholder="Phone Number"
+              maxlength="256"
+              name="Phone-number"
+              id="Phone"
+              data-name="Phone Number"
+              class="autoCompleteFull"
+              autocomplete="off"
+            />
+          </div>
+          <div class="rel-wrap">
+            <input
+              type="text"
+              required
+              id="domesticFromSuburb"
+              name="fromAddress"
+              placeholder="Collection Address"
+              data="domesticFrom"
+              class="autoCompleteFull"
+              autocomplete="off"
+            />
+            <div class="gps" data="domesticFrom"></div>
+            <div class="clearText">x</div>
+          </div>
+
+          <input type="hidden" required name="fromID" id="domesticFromID" />
+          <input type="hidden" required name="fromLat" id="domesticFromLat" />
+          <input type="hidden" required name="fromLong" id="domesticFromLong" />
+
+          <h4 class="form-heading">Where would you like to send it?</h4>
+          <div class="rel-wrap">
+            <input
+              type="text"
+              required=""
+              placeholder="Name"
+              maxlength="256"
+              name="First-Name"
+              id="to-name"
+              data-name="First Name"
+              class="autoCompleteFull"
+              autocomplete="off"
+            />
+          </div>
+          <div class="rel-wrap">
+            <input
+              type="tel"
+              required=""
+              placeholder="Phone Number"
+              maxlength="256"
+              name="Phone-number"
+              id="to-phone"
+              data-name="Phone Number"
+              class="autoCompleteFull"
+              autocomplete="off"
+            />
+          </div>
+          <div class="rel-wrap">
+            <input
+              type="text"
+              required
+              id="domesticToSuburb"
+              name="toAddress"
+              placeholder="Delivery Address"
+              data="domesticTo"
+              class="autoCompleteFull"
+              autocomplete="off"
+            />
+            <div class="gps" data="domesticTo"></div>
+            <div class="clearText">x</div>
+          </div>
+
+          <input type="hidden" required name="toID" id="domesticToID" />
+          <input type="hidden" required name="toLat" id="domesticToLat" />
+          <input type="hidden" required name="toLong" id="domesticToLong" />
+
+          <input
+            style="display: none"
+            class="hiddenInput"
+            id="ParcelTypeParcelDomestic"
+            type="radio"
+            name="ParcelType"
+            value="1"
+            checked="checked"
+            autocomplete="off"
+          />
+          <input
+            style="display: none"
+            class="hiddenInput"
+            id="ParcelTypeDocumentDomestic"
+            type="radio"
+            name="ParcelType"
+            value="2"
+            autocomplete="off"
+          />
+
+          <input
+            style="display: none"
+            class="hiddenInput"
+            id="DomesticFromSuburbDocId"
+            type="text"
+            name="DomesticFromSuburbDocId"
+            value="-1"
+            checked="checked"
+            autocomplete="off"
+          />
+          <input
+            style="display: none"
+            class="hiddenInput"
+            id="DomesticFromSuburbFormattedAddress"
+            type="text"
+            name="DomesticFromSuburbFormattedAddress"
+            value="-1"
+            checked="checked"
+            autocomplete="off"
+          />
+          <input
+            style="display: none"
+            class="hiddenInput"
+            id="DomesticFromSuburbLat"
+            type="text"
+            name="DomesticFromSuburbLat"
+            value="-1"
+            checked="checked"
+            autocomplete="off"
+          />
+          <input
+            style="display: none"
+            class="hiddenInput"
+            id="DomesticFromSuburbLon"
+            type="text"
+            name="DomesticFromSuburbLon"
+            value="-1"
+            checked="checked"
+            autocomplete="off"
+          />
+
+          <input
+            style="display: none"
+            class="hiddenInput"
+            id="DomesticToSuburbDocId"
+            type="text"
+            name="DomesticToSuburbDocId"
+            value="-1"
+            autocomplete="off"
+          />
+          <input
+            style="display: none"
+            class="hiddenInput"
+            id="DomesticToSuburbFormattedAddress"
+            type="text"
+            name="DomesticToSuburbFormattedAddress"
+            value="-1"
+            checked="checked"
+            autocomplete="off"
+          />
+          <input
+            style="display: none"
+            class="hiddenInput"
+            id="DomesticToSuburbLat"
+            type="text"
+            name="DomesticToSuburbLat"
+            value="-1"
+            checked="checked"
+            autocomplete="off"
+          />
+          <input
+            style="display: none"
+            class="hiddenInput"
+            id="DomesticToSuburbLon"
+            type="text"
+            name="DomesticToSuburbLon"
+            value="-1"
+            checked="checked"
+            autocomplete="off"
+          />
+
+          <input
+            style="display: none"
+            class="hiddenInput"
+            id="DomesticFromStreetNo"
+            type="text"
+            name="DomesticFromStreetNo"
+            value="-1"
+            checked="checked"
+            autocomplete="off"
+          />
+          <input
+            style="display: none"
+            class="hiddenInput"
+            id="DomesticFromStreet"
+            type="text"
+            name="DomesticFromStreet"
+            value="-1"
+            checked="checked"
+            autocomplete="off"
+          />
+          <input
+            style="display: none"
+            class="hiddenInput"
+            id="DomesticFromSuburb"
+            type="text"
+            name="DomesticFromSuburb"
+            value="-1"
+            checked="checked"
+            autocomplete="off"
+          />
+          <input
+            style="display: none"
+            class="hiddenInput"
+            id="DomesticFromCode"
+            type="text"
+            name="DomesticFromCode"
+            value="-1"
+            checked="checked"
+            autocomplete="off"
+          />
+          <input
+            style="display: none"
+            class="hiddenInput"
+            id="DomesticFromArea"
+            type="text"
+            name="DomesticFromArea"
+            value="-1"
+            checked="checked"
+            autocomplete="off"
+          />
+
+          <input
+            style="display: none"
+            class="hiddenInput"
+            id="DomesticToStreetNo"
+            type="text"
+            name="DomesticToStreetNo"
+            value="-1"
+            checked="checked"
+            autocomplete="off"
+          />
+          <input
+            style="display: none"
+            class="hiddenInput"
+            id="DomesticToStreet"
+            type="text"
+            name="DomesticToStreet"
+            value="-1"
+            checked="checked"
+            autocomplete="off"
+          />
+          <input
+            style="display: none"
+            class="hiddenInput"
+            id="DomesticToSuburb"
+            type="text"
+            name="DomesticToSuburb"
+            value="-1"
+            checked="checked"
+            autocomplete="off"
+          />
+          <input
+            style="display: none"
+            class="hiddenInput"
+            id="DomesticToCode"
+            type="text"
+            name="DomesticToCode"
+            value="-1"
+            checked="checked"
+            autocomplete="off"
+          />
+          <input
+            style="display: none"
+            class="hiddenInput"
+            id="DomesticToArea"
+            type="text"
+            name="DomesticToArea"
+            value="-1"
+            checked="checked"
+            autocomplete="off"
+          />
+
+          <h4 class="form-heading">What would you like to send?</h4>
+          <div class="slider2 select-label">
+            <div class="slider-slider" id="slider"></div>
+            <div class="slider2-option" id="parcel">
+              <img
+                style="width: 28px; margin-top: 3%"
+                src="/images/liftdrop box.png"
+              />
+              <h2>Parcel</h2>
+              <label for="rdio_p"></label>
+            </div>
+
+            <div class="slider2-option" id="document">
+              <img
+                style="width: 26px; margin-top: 3%"
+                src="/images/liftdrop doc.png"
+              />
+              <h2>Document</h2>
+              <label for="rdio_d"></label>
+            </div>
+          </div>
+          <input
+            type="radio"
+            name="what"
+            value="parcel"
+            id="rdio_p"
+            checked
+            class="hidden"
+          />
+          <input
+            type="radio"
+            name="what"
+            value="document"
+            id="rdio_d"
+            class="hidden"
+          />
+
+          <h4 class="form-heading">How many parcels are you sending?</h4>
+
+          <select
+            name="parcels"
+            id="numParcels"
+            onchange="parcelChange(this.value)"
+          >
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+          </select>
+
+          <h4 class="form-heading">
+            Does your parcel contain any items on the attached list?
+          </h4>
+          <select id="domesticRestrictedItems" name="restrictedItems">
+            <option selected disabled>Select</option>
+            <option>No</option>
+            <option value="0">Prohibited - Box With A Hazardous Label</option>
+            <option value="0">Prohibited - Dangerous Goods</option>
+            <option value="0">Prohibited - Dry Ice</option>
+            <option value="0">
+              Prohibited - Engine/Generator/Mechanical Containing Oil/Petrol
+            </option>
+            <option value="0">
+              Prohibited - Food Items (Perishable Goods)
+            </option>
+            <option value="0">Prohibited - Furniture</option>
+            <option value="0">
+              Prohibited - Glass, Crystal, Ceramic, Pottery
+            </option>
+            <option value="0">Prohibited - Hazardous Materials</option>
+            <option value="0">Prohibited - Human Remains / Body Fluids</option>
+            <option value="0">
+              Prohibited - Illegal Goods Or Prohibited By Law
+            </option>
+            <option value="0">Prohibited - Items Which Are Not Boxed</option>
+            <option value="0">Prohibited - Live / Dead Animals</option>
+            <option value="0">
+              Prohibited - Valuable Cargo, Money / Currency
+            </option>
+            <option value="0">
+              Prohibited - White Goods - Fridges, Ovens, Microwaves
+            </option>
+            <option value="0">Prohibited - Jewellery</option>
+            <option value="1">Restricted - Aerosol Cans / Sprays</option>
+            <option value="1">Restricted - Alcohol</option>
+            <option value="1">Restricted - Bicycle</option>
+            <option value="1">Restricted - Display / Exhibition Stands</option>
+            <option value="1">Restricted - Fire Extinguishers</option>
+            <option value="1">Restricted - Firearm</option>
+            <option value="1">
+              Restricted - Goods With Flammable Or Corrosive Liquids
+            </option>
+            <option value="1">
+              Restricted - Plants, Seeds, Flowers Or Derivatives
+            </option>
+            <option value="1">Restricted - Wet Or Lithium Batteries</option>
+          </select>
+
+          <h4 class="form-heading">What are the weight &amp; dimensions?</h4>
+          <div id="weights">
+            <div class="weight">
+              <input
+                name="ItemDimensions[0].Weight"
+                required
+                id="weight"
+                placeholder="Weight (kg)"
+                type="number"
+                min="0.1"
+                step="0.1"
+                max="15"
+                class="half"
+              />
+
+              <input
+                name="ItemDimensions[0].Length"
+                required
+                id="1-length"
+                placeholder="Length (cm)"
+                type="number"
+                min="10"
+                step="1"
+                max="120"
+                class="half"
+              />
+
+              <input
+                name="ItemDimensions[0].Width"
+                required
+                id="1-width"
+                placeholder="Width (cm)"
+                type="number"
+                min="10"
+                step="1"
+                max="60"
+                class="half"
+              />
+
+              <input
+                name="ItemDimensions[0].Height"
+                required
+                id="1-height"
+                placeholder="Height (cm)"
+                type="number"
+                min="1"
+                step="1"
+                max="60"
+                class="half"
+              />
+            </div>
+          </div>
+          <div style="display: none">
+            <h4 class="form-heading">Do you require ID confirmation?</h4>
+            <p class="form-text">
+              Select yes if you require the recipient to show ID when accepting
+              delivery
+            </p>
+            <select name="facetoface" required>
+              <option value="FALSE">No</option>
+              <option value="TRUE" selected>Yes</option>
+            </select>
+          </div>
+          <div class="container-footer">
+            <input
+              class="button_red"
+              type="submit"
+              value="GET QUOTE"
+              id="domSubmit"
+            />
+          </div>
+        </form>
+      </div>
+      <!-- <script src="/jquery.validate.js"></script>
+        <script src="/jquery.validate.unobtrusive.js"></script>
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyChQHPLvU3QSfgrZxnrrO_m2B7sk3ro5wU&libraries=places&callback=initMap"></script>
+        <script src="/googlemaps.js"></script> -->
+      <!-- <script>
+            document.ready = function () {
+                if (!firstTime) return;
+                firstTime = false;
+
+                if ($('#domesticFromSuburb').length > 0) {
+                    gmAutoComplete('domesticFromSuburb', '#DomesticFromSuburbDocId', '#DomesticFromSuburbFormattedAddress', '#DomesticFromSuburbLat', '#DomesticFromSuburbLon', '#DomesticFromSuburb', '#DomesticFromCode', '#DomesticFromArea', '#DomesticFromStreet', '#DomesticFromStreetNo');
+                }
+
+                if ($('#domesticToSuburb').length > 0) {
+                    gmAutoComplete('domesticToSuburb', '#DomesticToSuburbDocId', '#DomesticToSuburbFormattedAddress', '#DomesticToSuburbLat', '#DomesticToSuburbLon', '#DomesticToSuburb', '#DomesticToCode', '#DomesticToArea', '#DomesticToStreet', '#DomesticToStreetNo');
+                }
+
+                $(".clearText").click(function () {
+                    $(this).parent().children("input").val("");
+                    $(".dropdown").fadeOut();
+
+                    $(this).parent().removeClass("focused");
+                });
+
+
+                $("#domSubmit").click(function (e) {
+                
+                    if ($("#domesticRestrictedItems").val() == null) {
+                        $("#domesticRestrictedItems").addClass("error");
+                        e.preventDefault();
+                        return false;
+                    }
+
+                if  ($("#domesticRestrictedItems").val() === "0") {
+                        $("#domesticRestrictedItems").addClass("error");
+                        e.preventDefault();
+                        return false;
+                    }
+                });
+
+
+
+                $("#document").click(function () {
+                    $("#domesticRestrictedItems option").prop("disabled", true);
+                    $("#domesticRestrictedItems option:nth-child(2)").prop("disabled", false).prop("selected", true);
+                    $("#ParcelTypeDocumentDomestic").prop("checked", true);
+                });
+                $("#parcel").click(function () {
+                    $("#domesticRestrictedItems option").prop("disabled", false);
+                    $("#ParcelTypeParcelDomestic").prop("checked", true);
+                    $("#domesticRestrictedItems option:nth-child(1)").prop("selected", true);
+                });
+
+                $(".tabs .tab").click(function () {
+                    $(".tab").removeClass("selected");
+                    $(this).addClass("selected");
+                    $(".tab-content").addClass("bounce")
+
+                    setTimeout(function () {
+                        $(".tab-content").removeClass("bounce");
+                    }, 500);
+                });
+
+
+                $("#domesticParcel").validate();
+
+
+                $("#numParcels").change(function () {
+                    var max = $(this).val();
+
+                    var num = $("#weights .weight").length;
+                    for (var i = num; i < max; i++) {
+                        $("#weights").append(getWeightInput(i));
+                    }
+                    if (max < num) {
+                        $(".weight").each(function () {
+                            if ($(this).attr('parcel') > max - 1)
+                                $(this).remove();
+                        });
+                    }
+                });
+
+
+                PopulateRestrictedItems("#domesticRestrictedItems");
+
+                $("#domesticRestrictedItems").blur(function () {
+                    var theOption = $(this);
+
+
+
+                    if ($(theOption).val() == "Prohibited") {
+                        showError("We are unable to courier a prohibited item");
+                        $(theOption).addClass("error");
+                        $(theOption).removeClass("valid");
+                    }
+                    else {
+                        $(theOption).removeClass("error");
+                        $(theOption).addClass("valid");
+                    }
+                    if ($(theOption).val() == "Restricted") {
+                        showError("Your parcel contains a restricted Item and may take longer to reach destination");
+                    }
+                });
+
+
+            }
+
+            function getWeightInput(n) {
+                var html = '';
+                html += '<div class="weight" parcel="' + n + '">';
+                html += '<b>Parcel ' + (n + 1) + '</b><br/>';
+                html += '<input name="ItemDimensions[' + n + '].Weight" required id="weight" placeholder="Weight (kg)" type="number" min="0.1" step="0.1" max="30" class="half" /> ';
+
+                html += '<input name="ItemDimensions[' + n + '].Length" required id="length" placeholder="Length (cm)" type="number" min="10" step="1" max="120" class="half" /> ';
+
+                html += '<input name="ItemDimensions[' + n + '].Width" required id="width" placeholder="Width (cm)" type="number" min="10" step="1" max="60" class="half" /> ';
+
+                html += '<input name="ItemDimensions[' + n + '].Height" required id="height" placeholder="Height (cm)" type="number" min="1" step="1" max="60" class="half" /> ';
+                html += '</div>';
+                return html;
+            }
+        </script> -->
+    </div>
+    <script src="./calculate.js"></script>
+    <!-- <script src="/bootstrap.js"></script> -->
+    <!-- <script src="/respond.js"></script>
+    <script src="/mobi.js"></script> -->
+  </body>
+</html>

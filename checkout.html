@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="styles.css" rel="stylesheet" type="text/css" />
+    <title>Checkout</title>
+  </head>
+  <body>
+    <div class="containerQ" style="margin-top: 0px">
+      <div class="div-block-14" style="margin-bottom: 0%; margin-top: 20%">
+        <div class="div-block-15">
+          <h1 class="heading-7">Courier calculator</h1>
+          <p class="paragraph-4">Get a quick quote</p>
+        </div>
+      </div>
+      <div
+        class="containerQ"
+        style="
+          background-color: #f4f4f4;
+          border-radius: 0px 0px 20px 20px;
+          margin-bottom: 20%;
+        "
+      >
+        <form id="domesticParcel">
+          <h4 class="form-heading">Who we collecting from?</h4>
+          <div class="rel-wrap">
+            <input
+              type="text"
+              required=""
+              placeholder="Name"
+              maxlength="256"
+              name="First-Name"
+              id="First-Name"
+              data-name="First Name"
+              class="autoCompleteFull"
+              autocomplete="off"
+              disabled
+            />
+          </div>
+          <div class="rel-wrap">
+            <input
+              type="email"
+              required=""
+              placeholder="Email"
+              maxlength="256"
+              name="Email"
+              id="Email"
+              data-name="Email"
+              class="autoCompleteFull"
+              autocomplete="off"
+              disabled
+            />
+          </div>
+          <div class="rel-wrap">
+            <input
+              type="tel"
+              required=""
+              placeholder="Phone Number"
+              maxlength="256"
+              name="Phone-number"
+              id="Phone"
+              data-name="Phone Number"
+              class="autoCompleteFull"
+              autocomplete="off"
+              disabled
+            />
+          </div>
+          <div class="rel-wrap">
+            <input
+              type="text"
+              required
+              id="domesticFromSuburb"
+              name="fromAddress"
+              placeholder="Collection Address"
+              data="domesticFrom"
+              class="autoCompleteFull"
+              autocomplete="off"
+              disabled
+            />
+            <div class="gps" data="domesticFrom"></div>
+            <div class="clearText">x</div>
+          </div>
+
+          <h4 class="form-heading">Where would you like to send it?</h4>
+          <div class="rel-wrap">
+            <input
+              type="text"
+              required=""
+              placeholder="Name"
+              maxlength="256"
+              name="First-Name"
+              id="to-name"
+              data-name="First Name"
+              class="autoCompleteFull"
+              autocomplete="off"
+              disabled
+            />
+          </div>
+          <div class="rel-wrap">
+            <input
+              type="tel"
+              required=""
+              placeholder="Phone Number"
+              id="to-phone"
+              maxlength="256"
+              name="Phone-number"
+              data-name="Phone Number"
+              class="autoCompleteFull"
+              autocomplete="off"
+              disabled
+            />
+          </div>
+          <div class="rel-wrap">
+            <input
+              type="text"
+              required
+              id="domesticToSuburb"
+              name="toAddress"
+              placeholder="Delivery Address"
+              data="domesticTo"
+              class="autoCompleteFull"
+              autocomplete="off"
+              disabled
+            />
+            <div class="gps" data="domesticTo"></div>
+            <div class="clearText">x</div>
+          </div>
+
+          <div class="totalText">
+            <span>TOTAL</span>
+            <div class="totalPrice" id="totalPrice"></div>
+          </div>
+          <div class="container-footer">
+            <button class="btn-checkout" id="edit" onclick="editDetails(event)">
+              EDIT
+            </button>
+            <button class="btn-checkout" id="pay">PAY</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <script>
+      var fromData = JSON.parse(localStorage.getItem("fromData"));
+      document.getElementById("First-Name").value = fromData.name;
+      document.getElementById("Email").value = fromData.email;
+      document.getElementById("Phone").value = fromData.phone;
+      document.getElementById("domesticFromSuburb").value = fromData.address;
+
+      var toData = JSON.parse(localStorage.getItem("toData"));
+      document.getElementById("to-name").value = toData.name;
+      document.getElementById("to-phone").value = toData.phone;
+      document.getElementById("domesticToSuburb").value = toData.address;
+      document.getElementById("totalPrice").innerHTML =
+        "$" + localStorage.getItem("totalPrice");
+
+      function editDetails() {
+        event.preventDefault();
+        document.getElementById("First-Name").disabled = false;
+        document.getElementById("Email").disabled = false;
+        document.getElementById("Phone").disabled = false;
+        document.getElementById("domesticFromSuburb").disabled = false;
+        document.getElementById("to-name").disabled = false;
+        document.getElementById("to-phone").disabled = false;
+        document.getElementById("domesticToSuburb").disabled = false;
+        document.getElementById("First-Name").focus();
+      }
+    </script>
+  </body>
+</html>
