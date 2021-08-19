@@ -480,21 +480,8 @@
               <label for="rdio_d"></label>
             </div>
           </div>
-          <input
-            type="radio"
-            name="what"
-            value="parcel"
-            id="rdio_p"
-            checked
-            class="hidden"
-          />
-          <input
-            type="radio"
-            name="what"
-            value="document"
-            id="rdio_d"
-            class="hidden"
-          />
+          <input type="radio" name="what" value="parcel" id="rdio_p" checked />
+          <input type="radio" name="what" value="document" id="rdio_d" />
 
           <h4 class="form-heading">How many parcels are you sending?</h4>
 
@@ -569,7 +556,7 @@
               <input
                 name="ItemDimensions[0].Weight"
                 required
-                id="weight"
+                id="1-weight"
                 placeholder="Weight (kg)"
                 type="number"
                 min="0.1"
@@ -636,132 +623,163 @@
           </div>
         </form>
       </div>
-      <!-- <script src="/jquery.validate.js"></script>
-        <script src="/jquery.validate.unobtrusive.js"></script>
-        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyChQHPLvU3QSfgrZxnrrO_m2B7sk3ro5wU&libraries=places&callback=initMap"></script>
-        <script src="/googlemaps.js"></script> -->
-      <!-- <script>
-            document.ready = function () {
-                if (!firstTime) return;
-                firstTime = false;
+      <script src="/jquery.validate.js"></script>
+      <script src="/jquery.validate.unobtrusive.js"></script>
+      <script
+        type="text/javascript"
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyChQHPLvU3QSfgrZxnrrO_m2B7sk3ro5wU&libraries=places&callback=initMap"
+      ></script>
+      <script src="/googlemaps.js"></script>
+      <script>
+        document.ready = function () {
+          if (!firstTime) return;
+          firstTime = false;
 
-                if ($('#domesticFromSuburb').length > 0) {
-                    gmAutoComplete('domesticFromSuburb', '#DomesticFromSuburbDocId', '#DomesticFromSuburbFormattedAddress', '#DomesticFromSuburbLat', '#DomesticFromSuburbLon', '#DomesticFromSuburb', '#DomesticFromCode', '#DomesticFromArea', '#DomesticFromStreet', '#DomesticFromStreetNo');
-                }
+          if ($("#domesticFromSuburb").length > 0) {
+            gmAutoComplete(
+              "domesticFromSuburb",
+              "#DomesticFromSuburbDocId",
+              "#DomesticFromSuburbFormattedAddress",
+              "#DomesticFromSuburbLat",
+              "#DomesticFromSuburbLon",
+              "#DomesticFromSuburb",
+              "#DomesticFromCode",
+              "#DomesticFromArea",
+              "#DomesticFromStreet",
+              "#DomesticFromStreetNo"
+            );
+          }
 
-                if ($('#domesticToSuburb').length > 0) {
-                    gmAutoComplete('domesticToSuburb', '#DomesticToSuburbDocId', '#DomesticToSuburbFormattedAddress', '#DomesticToSuburbLat', '#DomesticToSuburbLon', '#DomesticToSuburb', '#DomesticToCode', '#DomesticToArea', '#DomesticToStreet', '#DomesticToStreetNo');
-                }
+          if ($("#domesticToSuburb").length > 0) {
+            gmAutoComplete(
+              "domesticToSuburb",
+              "#DomesticToSuburbDocId",
+              "#DomesticToSuburbFormattedAddress",
+              "#DomesticToSuburbLat",
+              "#DomesticToSuburbLon",
+              "#DomesticToSuburb",
+              "#DomesticToCode",
+              "#DomesticToArea",
+              "#DomesticToStreet",
+              "#DomesticToStreetNo"
+            );
+          }
 
-                $(".clearText").click(function () {
-                    $(this).parent().children("input").val("");
-                    $(".dropdown").fadeOut();
+          $(".clearText").click(function () {
+            $(this).parent().children("input").val("");
+            $(".dropdown").fadeOut();
 
-                    $(this).parent().removeClass("focused");
-                });
+            $(this).parent().removeClass("focused");
+          });
 
-
-                $("#domSubmit").click(function (e) {
-                
-                    if ($("#domesticRestrictedItems").val() == null) {
-                        $("#domesticRestrictedItems").addClass("error");
-                        e.preventDefault();
-                        return false;
-                    }
-
-                if  ($("#domesticRestrictedItems").val() === "0") {
-                        $("#domesticRestrictedItems").addClass("error");
-                        e.preventDefault();
-                        return false;
-                    }
-                });
-
-
-
-                $("#document").click(function () {
-                    $("#domesticRestrictedItems option").prop("disabled", true);
-                    $("#domesticRestrictedItems option:nth-child(2)").prop("disabled", false).prop("selected", true);
-                    $("#ParcelTypeDocumentDomestic").prop("checked", true);
-                });
-                $("#parcel").click(function () {
-                    $("#domesticRestrictedItems option").prop("disabled", false);
-                    $("#ParcelTypeParcelDomestic").prop("checked", true);
-                    $("#domesticRestrictedItems option:nth-child(1)").prop("selected", true);
-                });
-
-                $(".tabs .tab").click(function () {
-                    $(".tab").removeClass("selected");
-                    $(this).addClass("selected");
-                    $(".tab-content").addClass("bounce")
-
-                    setTimeout(function () {
-                        $(".tab-content").removeClass("bounce");
-                    }, 500);
-                });
-
-
-                $("#domesticParcel").validate();
-
-
-                $("#numParcels").change(function () {
-                    var max = $(this).val();
-
-                    var num = $("#weights .weight").length;
-                    for (var i = num; i < max; i++) {
-                        $("#weights").append(getWeightInput(i));
-                    }
-                    if (max < num) {
-                        $(".weight").each(function () {
-                            if ($(this).attr('parcel') > max - 1)
-                                $(this).remove();
-                        });
-                    }
-                });
-
-
-                PopulateRestrictedItems("#domesticRestrictedItems");
-
-                $("#domesticRestrictedItems").blur(function () {
-                    var theOption = $(this);
-
-
-
-                    if ($(theOption).val() == "Prohibited") {
-                        showError("We are unable to courier a prohibited item");
-                        $(theOption).addClass("error");
-                        $(theOption).removeClass("valid");
-                    }
-                    else {
-                        $(theOption).removeClass("error");
-                        $(theOption).addClass("valid");
-                    }
-                    if ($(theOption).val() == "Restricted") {
-                        showError("Your parcel contains a restricted Item and may take longer to reach destination");
-                    }
-                });
-
-
+          $("#domSubmit").click(function (e) {
+            if ($("#domesticRestrictedItems").val() == null) {
+              $("#domesticRestrictedItems").addClass("error");
+              e.preventDefault();
+              return false;
             }
 
-            function getWeightInput(n) {
-                var html = '';
-                html += '<div class="weight" parcel="' + n + '">';
-                html += '<b>Parcel ' + (n + 1) + '</b><br/>';
-                html += '<input name="ItemDimensions[' + n + '].Weight" required id="weight" placeholder="Weight (kg)" type="number" min="0.1" step="0.1" max="30" class="half" /> ';
-
-                html += '<input name="ItemDimensions[' + n + '].Length" required id="length" placeholder="Length (cm)" type="number" min="10" step="1" max="120" class="half" /> ';
-
-                html += '<input name="ItemDimensions[' + n + '].Width" required id="width" placeholder="Width (cm)" type="number" min="10" step="1" max="60" class="half" /> ';
-
-                html += '<input name="ItemDimensions[' + n + '].Height" required id="height" placeholder="Height (cm)" type="number" min="1" step="1" max="60" class="half" /> ';
-                html += '</div>';
-                return html;
+            if ($("#domesticRestrictedItems").val() === "0") {
+              $("#domesticRestrictedItems").addClass("error");
+              e.preventDefault();
+              return false;
             }
-        </script> -->
+          });
+
+          $("#document").click(function () {
+            $("#domesticRestrictedItems option").prop("disabled", true);
+            $("#domesticRestrictedItems option:nth-child(2)")
+              .prop("disabled", false)
+              .prop("selected", true);
+            $("#ParcelTypeDocumentDomestic").prop("checked", true);
+          });
+          $("#parcel").click(function () {
+            $("#domesticRestrictedItems option").prop("disabled", false);
+            $("#ParcelTypeParcelDomestic").prop("checked", true);
+            $("#domesticRestrictedItems option:nth-child(1)").prop(
+              "selected",
+              true
+            );
+          });
+
+          $(".tabs .tab").click(function () {
+            $(".tab").removeClass("selected");
+            $(this).addClass("selected");
+            $(".tab-content").addClass("bounce");
+
+            setTimeout(function () {
+              $(".tab-content").removeClass("bounce");
+            }, 500);
+          });
+
+          $("#domesticParcel").validate();
+
+          $("#numParcels").change(function () {
+            var max = $(this).val();
+
+            var num = $("#weights .weight").length;
+            for (var i = num; i < max; i++) {
+              $("#weights").append(getWeightInput(i));
+            }
+            if (max < num) {
+              $(".weight").each(function () {
+                if ($(this).attr("parcel") > max - 1) $(this).remove();
+              });
+            }
+          });
+
+          PopulateRestrictedItems("#domesticRestrictedItems");
+
+          $("#domesticRestrictedItems").blur(function () {
+            var theOption = $(this);
+
+            if ($(theOption).val() == "Prohibited") {
+              showError("We are unable to courier a prohibited item");
+              $(theOption).addClass("error");
+              $(theOption).removeClass("valid");
+            } else {
+              $(theOption).removeClass("error");
+              $(theOption).addClass("valid");
+            }
+            if ($(theOption).val() == "Restricted") {
+              showError(
+                "Your parcel contains a restricted Item and may take longer to reach destination"
+              );
+            }
+          });
+        };
+
+        function getWeightInput(n) {
+          var html = "";
+          html += '<div class="weight" parcel="' + n + '">';
+          html += "<b>Parcel " + (n + 1) + "</b><br/>";
+          html +=
+            '<input name="ItemDimensions[' +
+            n +
+            '].Weight" required id="weight" placeholder="Weight (kg)" type="number" min="0.1" step="0.1" max="30" class="half" /> ';
+
+          html +=
+            '<input name="ItemDimensions[' +
+            n +
+            '].Length" required id="length" placeholder="Length (cm)" type="number" min="10" step="1" max="120" class="half" /> ';
+
+          html +=
+            '<input name="ItemDimensions[' +
+            n +
+            '].Width" required id="width" placeholder="Width (cm)" type="number" min="10" step="1" max="60" class="half" /> ';
+
+          html +=
+            '<input name="ItemDimensions[' +
+            n +
+            '].Height" required id="height" placeholder="Height (cm)" type="number" min="1" step="1" max="60" class="half" /> ';
+          html += "</div>";
+          return html;
+        }
+      </script>
     </div>
     <script src="./calculate.js"></script>
-    <!-- <script src="/bootstrap.js"></script> -->
-    <!-- <script src="/respond.js"></script>
-    <script src="/mobi.js"></script> -->
+    <script src="/bootstrap.js"></script>
+    <script src="/respond.js"></script>
+    <script src="/mobi.js"></script>
   </body>
 </html>

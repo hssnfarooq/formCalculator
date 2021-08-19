@@ -11,8 +11,8 @@
     <div class="containerQ" style="margin-top: 0px">
       <div class="div-block-14" style="margin-bottom: 0%; margin-top: 20%">
         <div class="div-block-15">
-          <h1 class="heading-7">Courier calculator</h1>
-          <p class="paragraph-4">Get a quick quote</p>
+          <p>Total Price</p>
+          <h1 id="totalPrice"></h1>
         </div>
       </div>
       <div
@@ -128,17 +128,35 @@
             <div class="clearText">x</div>
           </div>
 
-          <div class="totalText">
-            <span>TOTAL</span>
-            <div class="totalPrice" id="totalPrice"></div>
-          </div>
-          <div class="container-footer">
-            <button class="btn-checkout" id="edit" onclick="editDetails(event)">
-              EDIT
-            </button>
-            <button class="btn-checkout" id="pay">PAY</button>
-          </div>
+          <h4 class="form-heading">How many parcels are you sending?</h4>
+          <input
+            type="text"
+            id="numParcels"
+            class="autoCompleteFull"
+            autocomplete="off"
+            disabled
+          />
+          <h4 class="form-heading">Your Parcel Contain</h4>
+          <input
+            type="text"
+            id="parcelItem"
+            class="autoCompleteFull"
+            autocomplete="off"
+            disabled
+          />
+          <h4 class="form-heading">What are the weight &amp; dimensions?</h4>
+          <div id="weights"></div>
         </form>
+        <div class="container-footer">
+          <button
+            class="btn-checkout"
+            id="edit"
+            onclick="location.href='index.html'"
+          >
+            EDIT
+          </button>
+          <button class="btn-checkout" id="pay">PAY</button>
+        </div>
       </div>
     </div>
     <script>
@@ -153,18 +171,39 @@
       document.getElementById("to-phone").value = toData.phone;
       document.getElementById("domesticToSuburb").value = toData.address;
       document.getElementById("totalPrice").innerHTML =
-        "$" + localStorage.getItem("totalPrice");
+        "R" + localStorage.getItem("totalPrice");
 
-      function editDetails() {
-        event.preventDefault();
-        document.getElementById("First-Name").disabled = false;
-        document.getElementById("Email").disabled = false;
-        document.getElementById("Phone").disabled = false;
-        document.getElementById("domesticFromSuburb").disabled = false;
-        document.getElementById("to-name").disabled = false;
-        document.getElementById("to-phone").disabled = false;
-        document.getElementById("domesticToSuburb").disabled = false;
-        document.getElementById("First-Name").focus();
+      var parcel = localStorage.getItem("parcel");
+      document.getElementById("numParcels").value = parcel;
+      document.getElementById("parcelItem").value =
+        localStorage.getItem("parcelItem");
+
+      var div = document.getElementById("weights");
+      var parcelInfo;
+      for (let i = 1; i <= parcel; i++) {
+        parcelInfo = JSON.parse(localStorage.getItem(`Parcel${i}`));
+        var newDiv = document.createElement("div");
+        newDiv.innerHTML = `<h4 style="font-size: 12px">Parcel ${i}</h4>
+  
+        <input name="ItemDimensions[0].Weight" required id="${i}-weight" type="text" min="0.1" step="0.1" max="15" class="half" disabled value="${
+          parcelInfo.weight
+        } kg" />
+
+        <input name="ItemDimensions[0].Length" required id="${i}-length" type="text" min="10" step="1" max="120" class="half" disabled value="${
+          parcelInfo.length
+        } cm" />
+
+        <input name="ItemDimensions[0].Width" required id="${i}-width" type="text" min="10" step="1" max="60" class="half" disabled value="${
+          parcelInfo.width
+        } cm"/>
+
+        <input name="ItemDimensions[0].Height" required id="${
+          i + 1
+        }-height" type="text" min="1" step="1" max="60" class="half" disabled value="${
+          parcelInfo.height
+        } cm"/>`;
+        newDiv.className = "weight";
+        div.appendChild(newDiv);
       }
     </script>
   </body>
