@@ -56,6 +56,10 @@ form.addEventListener("submit", () => {
   };
   localStorage.setItem("fromData", JSON.stringify(fromData));
   localStorage.setItem("toData", JSON.stringify(toData));
+  localStorage.setItem(
+    "type",
+    document.querySelector("input[name=what]:checked").value
+  );
   localStorage.setItem("parcel", parcel);
   localStorage.setItem("parcelItem", parcelItem);
   localStorage.setItem("totalPrice", totalPrice);

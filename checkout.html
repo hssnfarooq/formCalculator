@@ -127,6 +127,14 @@
             <div class="gps" data="domesticTo"></div>
             <div class="clearText">x</div>
           </div>
+          <h4 class="form-heading">What would you like to send?</h4>
+          <input
+            type="text"
+            id="type"
+            class="autoCompleteFull"
+            autocomplete="off"
+            disabled
+          />
 
           <h4 class="form-heading">How many parcels are you sending?</h4>
           <input
@@ -136,7 +144,9 @@
             autocomplete="off"
             disabled
           />
-          <h4 class="form-heading">Your Parcel Contain</h4>
+          <h4 class="form-heading">
+            Does parcel contain any prohibited or restricted items?
+          </h4>
           <input
             type="text"
             id="parcelItem"
@@ -172,6 +182,8 @@
       document.getElementById("domesticToSuburb").value = toData.address;
       document.getElementById("totalPrice").innerHTML =
         "R" + localStorage.getItem("totalPrice");
+
+      document.getElementById("type").value = localStorage.getItem("type");
 
       var parcel = localStorage.getItem("parcel");
       document.getElementById("numParcels").value = parcel;

@@ -23,10 +23,6 @@ body {
   background-color: #06f;
 }
 
-.div-block-15 {
-  text-align: center;
-}
-
 .containerQ {
   position: relative;
   padding-right: 7%;
@@ -230,8 +226,11 @@ form {
   background-color: rgba(255, 255, 255, 0.2);
   position: relative;
   border-radius: 5px;
-  display: block;
-  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* display: block;
+  box-sizing: border-box; */
 }
 
 .slider2-option label {
@@ -324,9 +323,9 @@ option {
 .slider2-option h2 {
   position: relative;
   font-size: 12px;
-  vertical-align: top;
+  vertical-align: middle;
   display: inline-block;
-  margin: 11px 8px;
+  margin: 16px 8px;
   text-align: center;
   line-height: 1.2;
   color: rgba(21, 21, 21, 0.67);
@@ -342,13 +341,13 @@ option {
   opacity: 1;
 }
 
-.slider2.start .slider-slider {
+/* .slider2.start .slider-slider {
   opacity: 0;
   margin: 3.8% 5%;
   height: 50%;
   width: 40%;
   box-sizing: content-box;
-}
+} */
 
 .slider2.select-1 .slider-slider {
   left: 0;
@@ -627,7 +626,7 @@ h3.step-instruction {
 .btn-checkout {
   background-color: #06f;
   color: white;
-  border: 0;
+  border-color: #06f;
   border-radius: 50px;
   padding: 12px;
   width: 150px;
@@ -647,4 +646,13 @@ h3.step-instruction {
   font-size: 30px;
   color: #fff;
   margin: 0;
+}
+
+#edit {
+  background-color: white;
+  color: #06f;
+}
+#edit:hover {
+  background-color: #06f;
+  color: white;
 }

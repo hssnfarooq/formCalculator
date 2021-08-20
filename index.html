@@ -460,28 +460,22 @@
           />
 
           <h4 class="form-heading">What would you like to send?</h4>
-          <div class="slider2 select-label">
+          <div class="slider2 select-1">
             <div class="slider-slider" id="slider"></div>
             <div class="slider2-option" id="parcel">
-              <img
-                style="width: 28px; margin-top: 3%"
-                src="/images/liftdrop box.png"
-              />
+              <img src="/images/liftdrop box.png" />
               <h2>Parcel</h2>
               <label for="rdio_p"></label>
             </div>
 
             <div class="slider2-option" id="document">
-              <img
-                style="width: 26px; margin-top: 3%"
-                src="/images/liftdrop doc.png"
-              />
+              <img src="/images/liftdrop doc.png" />
               <h2>Document</h2>
               <label for="rdio_d"></label>
             </div>
           </div>
-          <input type="radio" name="what" value="parcel" id="rdio_p" checked />
-          <input type="radio" name="what" value="document" id="rdio_d" />
+          <input type="radio" name="what" value="Parcel" id="rdio_p" checked />
+          <input type="radio" name="what" value="Document" id="rdio_d" />
 
           <h4 class="form-heading">How many parcels are you sending?</h4>
 
@@ -775,6 +769,27 @@
           html += "</div>";
           return html;
         }
+
+        var parcel = document.getElementById("parcel");
+        var doc = document.getElementById("document");
+        parcel.addEventListener("click", function () {
+          if (
+            document.querySelector(".slider2").classList.contains("select-2")
+          ) {
+            document.querySelector(".slider2").classList.remove("select-2");
+            document.querySelector(".slider2").classList.add("select-1");
+            document.getElementById("rdio_p").checked = true;
+          }
+        });
+        doc.addEventListener("click", function () {
+          if (
+            document.querySelector(".slider2").classList.contains("select-1")
+          ) {
+            document.querySelector(".slider2").classList.remove("select-1");
+            document.querySelector(".slider2").classList.add("select-2");
+            document.getElementById("rdio_d").checked = true;
+          }
+        });
       </script>
     </div>
     <script src="./calculate.js"></script>
