@@ -544,7 +544,9 @@
             <option value="1">Restricted - Wet Or Lithium Batteries</option>
           </select>
 
-          <h4 class="form-heading">What are the weight &amp; dimensions?</h4>
+          <h4 class="form-heading" id="dim">
+            What are the weight &amp; dimensions?
+          </h4>
           <div id="weights">
             <div class="weight">
               <input
@@ -779,6 +781,19 @@
             document.querySelector(".slider2").classList.remove("select-2");
             document.querySelector(".slider2").classList.add("select-1");
             document.getElementById("rdio_p").checked = true;
+
+            document.getElementById("1-weight").type = "number";
+            document.getElementById("1-weight").value = "";
+            document.getElementById("1-weight").disabled = false;
+            document.getElementById("1-width").type = "number";
+            document.getElementById("1-width").value = "";
+            document.getElementById("1-width").disabled = false;
+            document.getElementById("1-length").type = "number";
+            document.getElementById("1-length").value = "";
+            document.getElementById("1-length").disabled = false;
+            document.getElementById("1-height").type = "number";
+            document.getElementById("1-height").value = "";
+            document.getElementById("1-height").disabled = false;
           }
         });
         doc.addEventListener("click", function () {
@@ -788,6 +803,19 @@
             document.querySelector(".slider2").classList.remove("select-1");
             document.querySelector(".slider2").classList.add("select-2");
             document.getElementById("rdio_d").checked = true;
+
+            document.getElementById("1-weight").type = "text";
+            document.getElementById("1-weight").value = "N/A";
+            document.getElementById("1-weight").disabled = true;
+            document.getElementById("1-width").type = "text";
+            document.getElementById("1-width").value = "N/A";
+            document.getElementById("1-width").disabled = true;
+            document.getElementById("1-length").type = "text";
+            document.getElementById("1-length").value = "N/A";
+            document.getElementById("1-length").disabled = true;
+            document.getElementById("1-height").type = "text";
+            document.getElementById("1-height").value = "N/A";
+            document.getElementById("1-height").disabled = true;
           }
         });
       </script>

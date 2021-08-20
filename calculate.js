@@ -10,36 +10,44 @@ var price = 0;
 var totalPrice = 0;
 form.addEventListener("submit", () => {
   //event.preventDefault();
+  var type = document.querySelector("input[name=what]:checked").value;
   var parcel = Number(document.getElementById("numParcels").value);
   var parcelItem = document.getElementById("domesticRestrictedItems");
   parcelItem = parcelItem.options[parcelItem.selectedIndex].text;
-  console.log(parcelItem);
   for (let i = 1; i <= parcel; i++) {
-    var weight = document.getElementById(`${i}-weight`).value;
-    var width = document.getElementById(`${i}-width`).value;
-    var height = document.getElementById(`${i}-height`).value;
-    var length = document.getElementById(`${i}-length`).value;
-    var dimension = width * height * length;
-    if (dimension < 8000) {
+    if (type === "Document") {
+      if (i > 1) {
+        price += 20;
+      }
       small = true;
+    } else {
+      var weight = document.getElementById(`${i}-weight`).value;
+      var width = document.getElementById(`${i}-width`).value;
+      var height = document.getElementById(`${i}-height`).value;
+      var length = document.getElementById(`${i}-length`).value;
+      var dimension = width * height * length;
+      if (dimension < 8000) {
+        small = true;
+      }
+      if (dimension >= 8000 && dimension <= 64000) {
+        medium = true;
+      }
+      if (dimension > 64000) {
+        large = true;
+      }
+      if (i > 1) {
+        price += 20;
+      }
+      parcelInfo = {
+        weight: weight,
+        width: width,
+        height: height,
+        length: length,
+      };
+      localStorage.setItem(`Parcel${i}`, JSON.stringify(parcelInfo));
     }
-    if (dimension >= 8000 && dimension <= 64000) {
-      medium = true;
-    }
-    if (dimension > 64000) {
-      large = true;
-    }
-    if (i > 1) {
-      price += 20;
-    }
+
     calculateParcelPrice();
-    parcelInfo = {
-      weight: weight,
-      width: width,
-      height: height,
-      length: length,
-    };
-    localStorage.setItem(`Parcel${i}`, JSON.stringify(parcelInfo));
   }
 
   totalPrice = basePrice + price;
@@ -56,10 +64,7 @@ form.addEventListener("submit", () => {
   };
   localStorage.setItem("fromData", JSON.stringify(fromData));
   localStorage.setItem("toData", JSON.stringify(toData));
-  localStorage.setItem(
-    "type",
-    document.querySelector("input[name=what]:checked").value
-  );
+  localStorage.setItem("type", type);
   localStorage.setItem("parcel", parcel);
   localStorage.setItem("parcelItem", parcelItem);
   localStorage.setItem("totalPrice", totalPrice);
@@ -81,6 +86,10 @@ function calculateParcelPrice() {
 }
 
 function parcelChange(num) {
+  var type = document.querySelector("input[name=what]:checked").value;
+  if (type === "Document") {
+    return;
+  }
   var div = document.getElementById("weights");
   div.innerHTML = `
   
